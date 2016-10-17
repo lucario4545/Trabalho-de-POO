@@ -26,6 +26,8 @@ public class TelaBusca extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		// TODO: Essa lógica de pra letura tem que sair daqui e tem que ser colocada no pacote controller
+		// de preferência - Líder
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -65,7 +67,7 @@ public class TelaBusca extends JFrame {
 	
 	public void procuraArquivo(){
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos de texto (.txt)","txt");
-		String diretorioArquivo;
+		// String diretorioArquivo;
 		String diretorioBase = System.getProperty("user.home")+"/Documents";
 		File dir = new File(diretorioBase);
 		

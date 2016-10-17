@@ -1,5 +1,0 @@
-jsoup-1.9.2.jar
-LICENSE
-README.md
-teste.txt
-trabalho/
