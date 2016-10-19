@@ -1,5 +1,7 @@
 package roboLigaMagic;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.jsoup.Connection;
@@ -27,17 +29,19 @@ public class MainRoboLigaMagic {
 		System.setProperty("http.proxyPort", "8080");
         
         String urlbusca = "http://www.ligamagic.com.br/?view=cards%2Fsearch&card="; 
-        String url = urlbusca + URLEncoder.encode(nomeCarta); // TODO: Usar uma função que não esteja deprecated...
+        String url;
         
-        try {		
-            Connection connection = Jsoup.connect(url);
-					
+		try { // NOTA: Maldito java que me força a envolver as coisas em Try/Catch ¬¬
+			url = urlbusca + URLEncoder.encode(nomeCarta,"UTF-8"); 
+			Connection connection = Jsoup.connect(url);
+			
             Document doc = connection.get();
             
-            Elements precosEQuantidades = doc.select("tr > td > p"); // NOTA: o primeiro é o nome e o segundo é uma outra coisa whatever
-			 														 // NOTA: Esse algoritmo é bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
-  			 														 // nesse cara. ass: Líder
-		  				 										     // NOTA: limpar esse valor
+            Elements precosEQuantidades = doc.select("tr > td > p"); 
+            
+            // NOTA: o primeiro é o nome e o segundo é uma outra coisa whatever
+			// NOTA: Esse algoritmo é bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
+  			// nesse cara. ass: Líder
             
             Element precoElemento = precosEQuantidades.get(0);
             Element quantidadeElemento    = precosEQuantidades.get(1);
@@ -54,20 +58,21 @@ public class MainRoboLigaMagic {
             String nomeLoja = tagLojaMaisBarata.attr("title");
             
             System.out.println("preco = "+preco+" ; Quantidade: "+quantidade+" Loja: "+nomeLoja);
+  						
+            // TODO: ver se dá pra downloadar e exibir a imagemzinha da carta
+            // TODO: Ver se não seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
             
-            
-            						
-            									  // TODO: ver se dá pra downloadar e exibir a imagemzinha da carta
-            									  // TODO: Ver se não seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
-            } 
-            catch (Exception e) {
-            	System.out.println("Fudeu fudeu");
-                e.printStackTrace();
-            } // NOTA: Em referenced libraries, o jar com o jsoup está configurado para ser o que está na minha maquina de trabalho
-              // se você mudar vai dar erro.
-              // lembre-se de mudar esse cara depois caso você execute o projeto de outra maquina
-              // o .jar está dentro da pasta desse projeto
-        	  // Ass: Líder
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace(); // Pânico
+		} catch (IOException e) {
+			e.printStackTrace(); // Mais Pânico
+		}
+        
+        // NOTA: Em referenced libraries, o jar com o jsoup está configurado para ser o que está na minha maquina de trabalho
+        // se você mudar vai dar erro.
+        // lembre-se de mudar esse cara depois caso você execute o projeto de outra maquina
+        // o .jar está dentro da pasta desse projeto
+        // Ass: Líder
     }
 
 }
