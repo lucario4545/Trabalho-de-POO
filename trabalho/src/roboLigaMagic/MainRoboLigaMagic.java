@@ -11,7 +11,9 @@ import org.jsoup.select.Elements;
 public class MainRoboLigaMagic {
 
 	public static void main(String[] args) {  
-        String string = "Chandra Nalaar"; 
+        String string = "Kalitas, Bloodchief of Ghet"; 
+        // NOTA: Se o robô não encontrar o nome da carta exatamente, ele vai cuspir Informações aleatórias bizarras.
+        // Isso também vale caso o nome da carta esteja qualquer lingua que não o inglês na busca ¬¬
        
         buscarPreco(string);
     }
@@ -31,15 +33,32 @@ public class MainRoboLigaMagic {
             Connection connection = Jsoup.connect(url);
 					
             Document doc = connection.get();
-			
-            Element teste = doc.getElementsByClass("lj").get(2); // NOTA: o primeiro é o nome e o segundo é uma outra coisa whatever
-            													 // NOTA: Esse algoritmo é bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
-            												     // nesse cara. ass: Líder
-            String t = teste.text();			  // NOTA: limpar esse valor
-            System.out.println("Sucesso - "+url); 
-            									  // TODO: pegar o resto das informações
+            
+            Elements precosEQuantidades = doc.select("tr > td > p"); // NOTA: o primeiro é o nome e o segundo é uma outra coisa whatever
+			 														 // NOTA: Esse algoritmo é bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
+  			 														 // nesse cara. ass: Líder
+		  				 										     // NOTA: limpar esse valor
+            
+            Element precoElemento = precosEQuantidades.get(0);
+            Element quantidadeElemento    = precosEQuantidades.get(1);
+            
+            String precoSujo = precoElemento.text();
+            String quantidadeSuja = quantidadeElemento.text();
+            String precos[] = precoSujo.split(" ");
+            String preco = precos[precos.length-1];
+            String quantidades[] = quantidadeSuja.split(" ");
+            String quantidade = quantidades[0];
+            
+            Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
+            Element tagLojaMaisBarata = tagBannerLoja.get(0);
+            String nomeLoja = tagLojaMaisBarata.attr("title");
+            
+            System.out.println("preco = "+preco+" ; Quantidade: "+quantidade+" Loja: "+nomeLoja);
+            
+            
+            						
             									  // TODO: ver se dá pra downloadar e exibir a imagemzinha da carta
-            									  // TODO: Ver se não seria melhor downlodar tudo, colocar num bancode dados e depois exibir pro usuario.
+            									  // TODO: Ver se não seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
             } 
             catch (Exception e) {
             	System.out.println("Fudeu fudeu");
