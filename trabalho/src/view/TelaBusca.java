@@ -88,7 +88,6 @@ public class TelaBusca extends JFrame {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		}
 	}
 	public void Exibe(String file) throws FileNotFoundException{
