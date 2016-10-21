@@ -14,19 +14,21 @@ public class MainRoboLigaMagic {
 
 	public static void main(String[] args) {  
         String string = "Kalitas, Bloodchief of Ghet"; 
-        // NOTA: Se o robô não encontrar o nome da carta exatamente, ele vai cuspir Informações aleatórias bizarras.
-        // Isso também vale caso o nome da carta esteja qualquer lingua que não o inglês na busca ¬¬
+        
        
         buscarPreco(string);
     }
     
     public static void buscarPreco(String nomeCarta){
     	
+    	// NOTA: Se o robô não encontrar o nome da carta exatamente, ele vai cuspir Informações aleatórias bizarras.
+        // Isso também vale caso o nome da carta esteja qualquer lingua que não o inglês na busca ¬¬
+    	
     	// isso aqui é só pra fazer bang funcionar no meu trabalho.
     	// se você for mexer nesse cara, comente essa linha e depois lembre-se de volta-la ao normal k
     	// ass: Líder
-    	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
-		System.setProperty("http.proxyPort", "8080");
+    	// System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
+		// System.setProperty("http.proxyPort", "8080");
         
         String urlbusca = "http://www.ligamagic.com.br/?view=cards%2Fsearch&card="; 
         String url;
@@ -43,8 +45,9 @@ public class MainRoboLigaMagic {
 			// NOTA: Esse algoritmo é bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
   			// nesse cara. ass: Líder
             
+            
             Element precoElemento = precosEQuantidades.get(0);
-            Element quantidadeElemento    = precosEQuantidades.get(1);
+            Element quantidadeElemento    =  precosEQuantidades.get(1);
             
             String precoSujo = precoElemento.text();
             String quantidadeSuja = quantidadeElemento.text();
@@ -54,7 +57,7 @@ public class MainRoboLigaMagic {
             String quantidade = quantidades[0];
             
             Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
-            Element tagLojaMaisBarata = tagBannerLoja.get(0);
+            Element tagLojaMaisBarata = (Element) tagBannerLoja.get(0);
             String nomeLoja = tagLojaMaisBarata.attr("title");
             
             System.out.println("preco = "+preco+" ; Quantidade: "+quantidade+" Loja: "+nomeLoja);
