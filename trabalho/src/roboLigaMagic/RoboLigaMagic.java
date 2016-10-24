@@ -3,53 +3,50 @@ package roboLigaMagic;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import model.Carta;
 
 public class RoboLigaMagic {
-	
-	public void getPrecoDeck(String[][] listaCartas){
+	public List<Carta> getPrecoDeck(List<String[]> listaCartas){
+		// NOTA: Exemplo de Matriz
+		// [["Archangel Avacyn",4],["Chandra Nalaar",2],["Ulrich of the Krallenhorde",2]];
+		List<Carta> relacaoDePrecos = new ArrayList<>();
 		
-		Carta[] relacaoDePrecos = new Carta[listaCartas.length];
-		
-		
-		for(int loop =0;loop<listaCartas.length;loop++){
-			String[] carta = listaCartas[loop];
+		for(int loop =0;loop<listaCartas.size();loop++){
+			String[] carta = listaCartas.get(loop);
 			String nomeCarta = carta[0];
 			int quantidade = Integer.parseInt(carta[1]);
 			
-			relacaoDePrecos[loop] = buscarPreco(nomeCarta,quantidade);
+			List<Carta> response = buscarPreco(nomeCarta,quantidade);
+			
+			relacaoDePrecos.addAll(response);	
 		}
 		
-		
+		return relacaoDePrecos;
 	}
 	
-    public Carta buscarPreco(String nomeCarta, int quantidade){
+    public static List<Carta> buscarPreco(String nomeCarta, int quantidade){
+    	// NOTA: Essas linhas sÃ³ sÃ£o necessÃ¡rias para fazer essa merda funcionar no meu trabalho
+    	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
+		System.setProperty("http.proxyPort", "8080"); 
     	
-    	// NOTA: Se o robô não encontrar o nome da carta exatamente, ele vai cuspir Informações aleatórias bizarras.
-        // Isso também vale caso o nome da carta esteja qualquer lingua que não o inglês na busca ¬¬
+    	// NOTA: O algoritmo nÃ£o funciona o nome da carta nÃ£o estiver em inglÃªs.
+    	// Se o nome estiver incompleto InformaÃ§Ãµes aleatÃ³rias vÃ£o ser cuspidas na tela.
+      
     	
-    	// isso aqui é só pra fazer bang funcionar no meu trabalho.
-    	// se você for mexer nesse cara, comente essa linha e depois lembre-se de volta-la ao normal k
-    	// ass: Líder
-    	// System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
-		// System.setProperty("http.proxyPort", "8080");
+        String urlbusca = "http://www.ligamagic.com.br/?view=cards/card&card="; 
+        String url; 
         
-		// TODO: Criar a lógica pra pegar as cartas dos outros lugares caso no lugar mais barato não
-		// Seja o suficiente
-		
-        String urlbusca = "http://www.ligamagic.com.br/?view=cards%2Fsearch&card="; 
-        String url;
+        List<Carta> resposta = new ArrayList<Carta>();
         
-         
-        
-		try { // NOTA: Maldito java que me força a envolver as coisas em Try/Catch ¬¬
+		try { // NOTA: Maldito java que me forÃ§a a envolver as coisas em Try/Catch 
 			url = urlbusca + URLEncoder.encode(nomeCarta,"UTF-8"); 
 			Connection connection = Jsoup.connect(url);
 			
@@ -57,41 +54,66 @@ public class RoboLigaMagic {
             
             Elements precosEQuantidades = doc.select("tr > td > p"); 
             
-            // NOTA: o primeiro é o nome e o segundo é uma outra coisa whatever
-			// NOTA: Esse algoritmo é bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
-  			// nesse cara. ass: Líder
             
+            Elements precosSujo = new Elements();
+            Elements quantidadeSuja =  new Elements();
             
-            Element precoElemento = precosEQuantidades.get(0);
-            Element quantidadeElemento    =  precosEQuantidades.get(1);
+            // TODO: Decidir como o programa deve responder caso nÃ£o exista em estoque em nenhum lugar uma cÃ³pia da carta
+            // TODO: Decidir como o programa deve responder caso nÃ£o exita em estoque uma quantidade de carta o suficiente.
             
-            String precoSujo = precoElemento.text();
-            String quantidadeSuja = quantidadeElemento.text();
-            String precos[] = precoSujo.split(" ");
-            String preco = precos[precos.length-1];
-            String quantidades[] = quantidadeSuja.split(" ");
-            String quantidade = quantidades[0];
+            for(int loop = 0;loop < precosEQuantidades.size();loop++){
+            	if(loop % 2 == 0){
+            		precosSujo.add(precosEQuantidades.get(loop));
+            	}
+            	else{
+            		quantidadeSuja.add(precosEQuantidades.get(loop));
+            	}
+            }
             
-            Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
-            Element tagLojaMaisBarata = (Element) tagBannerLoja.get(0);
-            String nomeLoja = tagLojaMaisBarata.attr("title");
-            
-            System.out.println("preco = "+preco+" ; Quantidade: "+quantidade+" Loja: "+nomeLoja);
-  						
-            // TODO: ver se dá pra downloadar e exibir a imagemzinha da carta
-            // TODO: Ver se não seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
-            
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace(); // Pânico
-		} catch (IOException e) {
-			e.printStackTrace(); // Mais Pânico
-		}
-        
-        // NOTA: Em referenced libraries, o jar com o jsoup está configurado para ser o que está na minha maquina de trabalho
-        // se você mudar vai dar erro.
-        // lembre-se de mudar esse cara depois caso você execute o projeto de outra maquina
-        // o .jar está dentro da pasta desse projeto
-        // Ass: Líder
-    }
+			// NOTA: Esse algoritmo bem ad-hoc, qualquer mudanï¿½a no site da liga pode impactar em mudanï¿½as
+  			// nesse cara. ass: LÃ­der
 
+            Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
+            
+            int loop = 0;
+            
+            while(quantidade > 0){
+            	
+            	String quantS = quantidadeSuja.get(loop).text().split(" ")[0];
+            	String precoS = precosSujo.get(loop).text().split(" ")[1];
+            	
+            	int q = Integer.parseInt(quantS);
+            	
+            	int quantidadeCartas = (q >= quantidade) ? quantidade : q;
+            	String nomeLoja = tagBannerLoja.get(loop).attr("title");
+     
+            	double preco = Double.parseDouble(precoS.replace(",","."));
+            	
+            	quantidade -= q;	
+
+            	resposta.add(new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco));
+            	loop++;
+            }
+            
+            return resposta;
+             
+            // TODO: ver se dÃ¡ pra downloadar e exibir a imagemzinha da carta
+           
+            // TODO: Ver se nï¿½o seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
+        
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace(); // PÃ¢nico
+		} catch (IOException e) {
+			e.printStackTrace(); // Mais PÃ¢nico
+		}
+		
+		return null;
+        
+        // NOTA: Em referenced libraries, o jar com o jsoup estï¿½ configurado para ser o que estÃ¡ na minha maquina de trabalho
+        // se vocÃª mudar vai dar erro.
+        // lembre-se de mudar esse cara depois caso vocï¿½ execute o projeto de outra maquina
+        // o .jar estï¿½ dentro da pasta desse projeto
+        // Ass: LÃ­der
+    }
+    
 }

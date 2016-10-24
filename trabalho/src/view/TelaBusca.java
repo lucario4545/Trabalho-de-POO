@@ -9,14 +9,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JTextField; // NOTA: Isso ainda vai ser usado um dia.
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import model.Carta;
+import roboLigaMagic.RoboLigaMagic;
 
 public class TelaBusca extends JFrame {
 
@@ -24,10 +28,10 @@ public class TelaBusca extends JFrame {
 
 	/**
 	 * Launch the application.
-	 */ // NOTA: mandar esses caras deixar o encoding do arquivo em utf-8
+	 */
 	public static void main(String[] args) {
-		// TODO: Essa l�gica de pra letura tem que sair daqui e tem que ser colocada no pacote controller
-		// de prefer�ncia - L�der
+		// TODO: Essa lógica de pra letura tem que sair daqui e tem que ser colocada no pacote controller
+		// de preferência - Líder
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -58,16 +62,27 @@ public class TelaBusca extends JFrame {
 		ActionListener busca = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				procuraArquivo();
+				try {
+					
+					String caminho = procuraArquivo();
+					ArrayList<String[]> relacao = getRelacaoCartas(caminho);
+					exibePrecoDeck(relacao);
+					
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}			
 		};
 		
 		btnBusca.addActionListener(busca);
 	}
 	
-	public void procuraArquivo(){
+	public String procuraArquivo(){
+		
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos de texto (.txt)","txt");
-		// String diretorioArquivo;
+
 		String diretorioBase = System.getProperty("user.home")+"/Documents";
 		File dir = new File(diretorioBase);
 		
@@ -82,35 +97,47 @@ public class TelaBusca extends JFrame {
 		if (retorno == JFileChooser.APPROVE_OPTION){
 			CaminhoArquivo = choose.getSelectedFile().getAbsolutePath();			
 			this.dispose();
-			try {
-				Exibe(CaminhoArquivo);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
+		
+		return CaminhoArquivo;
 	}
-	public void Exibe(String file) throws FileNotFoundException{
-		ArrayList<String> Cartas = new ArrayList<String> ();
+	
+	public ArrayList<String[]> getRelacaoCartas(String file) throws FileNotFoundException{
+		
+		ArrayList<String[]> Cartas = new ArrayList<String[]> (); 
+		
 		try {
 			FileReader fileReader = new FileReader(file);
 			BufferedReader reader = new BufferedReader(fileReader);
+			
 			String linha = reader.readLine();
-			//String [] array;
-			//array = linha.split(";");
-			//
+			
 			while(linha != null){
-				Cartas.add(linha);
+				String [] array;
+				array = linha.split(";");
+				Cartas.add(array);
+				
 				linha = reader.readLine();
 			}
 			reader.close();
-			for(int x=0;x< Cartas.size();x++){
-				System.out.println(Cartas.get(x));				
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
+		} 
+		catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return Cartas;
+	}
+	
+	public void exibePrecoDeck(ArrayList<String[]> cartas){
+		RoboLigaMagic robo = new RoboLigaMagic();
+		
+		List<Carta> relacaoDeck = robo.getPrecoDeck(cartas);
+		
+		for(int loop = 0; loop< relacaoDeck.size();loop++){
+			System.out.println(relacaoDeck.get(loop).toString()+"\n");
+		}
+		return;
 	}
 
 }

@@ -41,4 +41,11 @@ public class Carta {
 	public void setPreco(double preco) {
 		this.preco = preco;
 	}
+	
+	@Override
+	public String toString(){
+		
+		String msg = "Nome Carta: "+this.nome+"; Quantidade: "+this.quantidade+"; Loja: "+this.loja+"; Preco: R$ "+this.preco;	
+		return msg;
+	}
 }
