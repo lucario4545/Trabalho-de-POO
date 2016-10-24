@@ -10,16 +10,27 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class MainRoboLigaMagic {
+import model.Carta;
 
-	public static void main(String[] args) {  
-        String string = "Kalitas, Bloodchief of Ghet"; 
-        
-       
-        buscarPreco(string);
-    }
-    
-    public static void buscarPreco(String nomeCarta){
+public class RoboLigaMagic {
+	
+	public void getPrecoDeck(String[][] listaCartas){
+		
+		Carta[] relacaoDePrecos = new Carta[listaCartas.length];
+		
+		
+		for(int loop =0;loop<listaCartas.length;loop++){
+			String[] carta = listaCartas[loop];
+			String nomeCarta = carta[0];
+			int quantidade = Integer.parseInt(carta[1]);
+			
+			relacaoDePrecos[loop] = buscarPreco(nomeCarta,quantidade);
+		}
+		
+		
+	}
+	
+    public Carta buscarPreco(String nomeCarta, int quantidade){
     	
     	// NOTA: Se o robô não encontrar o nome da carta exatamente, ele vai cuspir Informações aleatórias bizarras.
         // Isso também vale caso o nome da carta esteja qualquer lingua que não o inglês na busca ¬¬
@@ -30,8 +41,13 @@ public class MainRoboLigaMagic {
     	// System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
 		// System.setProperty("http.proxyPort", "8080");
         
+		// TODO: Criar a lógica pra pegar as cartas dos outros lugares caso no lugar mais barato não
+		// Seja o suficiente
+		
         String urlbusca = "http://www.ligamagic.com.br/?view=cards%2Fsearch&card="; 
         String url;
+        
+         
         
 		try { // NOTA: Maldito java que me força a envolver as coisas em Try/Catch ¬¬
 			url = urlbusca + URLEncoder.encode(nomeCarta,"UTF-8"); 
