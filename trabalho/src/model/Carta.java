@@ -5,9 +5,7 @@ public class Carta {
 	private int quantidade;
 	private String loja;
 	private double preco;
-	
-<<<<<<< HEAD
-=======
+
 	public Carta(String nome,int quantidade,String loja,double preco){
 		this.nome = nome;
 		this.quantidade = quantidade;
@@ -19,7 +17,6 @@ public class Carta {
 		this("",0,"",0.0);
 	}
 	
->>>>>>> Mudanças que eu fiz durante o fim de semana
 	public String getNome() {
 		return nome;
 	}
