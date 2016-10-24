@@ -24,10 +24,10 @@ public class TelaBusca extends JFrame {
 
 	/**
 	 * Launch the application.
-	 */
+	 */ // NOTA: mandar esses caras deixar o encoding do arquivo em utf-8
 	public static void main(String[] args) {
-		// TODO: Essa lógica de pra letura tem que sair daqui e tem que ser colocada no pacote controller
-		// de preferência - Líder
+		// TODO: Essa lï¿½gica de pra letura tem que sair daqui e tem que ser colocada no pacote controller
+		// de preferï¿½ncia - Lï¿½der
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
