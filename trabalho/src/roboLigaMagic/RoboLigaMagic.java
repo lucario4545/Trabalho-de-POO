@@ -9,19 +9,18 @@ import java.util.List;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import model.Carta;
 
 public class RoboLigaMagic {
-	public List<Carta> getPrecoDeck(String[][] listaCartas){
+	public List<Carta> getPrecoDeck(List<String[]> listaCartas){
 		// NOTA: Exemplo de Matriz
 		// [["Archangel Avacyn",4],["Chandra Nalaar",2],["Ulrich of the Krallenhorde",2]];
 		List<Carta> relacaoDePrecos = new ArrayList<>();
 		
-		for(int loop =0;loop<listaCartas.length;loop++){
-			String[] carta = listaCartas[loop];
+		for(int loop =0;loop<listaCartas.size();loop++){
+			String[] carta = listaCartas.get(loop);
 			String nomeCarta = carta[0];
 			int quantidade = Integer.parseInt(carta[1]);
 			
@@ -33,23 +32,13 @@ public class RoboLigaMagic {
 		return relacaoDePrecos;
 	}
 	
-//	public static void main(String[] args){
-//		String nome = "Archangel Avacyn";
-//		//String nome = "Equinox"; // NOTA: Nome de teste para cartas que não existem em estoque em nenhum lugar
-//		int quantidade = 50;
-//		
-//		List<Carta>  = buscarPreco(nome,quantidade);
-//		System.out.println("Sucesso Sucesso Suuuuuuuuuuuuucesso");
-//		
-//	}
-	
     public static List<Carta> buscarPreco(String nomeCarta, int quantidade){
-    	// NOTA: Essas linhas só são necessárias para fazer essa merda funcionar no meu trabalho
+    	// NOTA: Essas linhas sÃ³ sÃ£o necessÃ¡rias para fazer essa merda funcionar no meu trabalho
     	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
 		System.setProperty("http.proxyPort", "8080"); 
     	
-    	// NOTA: O algoritmo não funciona o nome da carta não estiver em inglês.
-    	// Se o nome estiver incompleto Informações aleatórias vão ser cuspidas na tela.
+    	// NOTA: O algoritmo nÃ£o funciona o nome da carta nÃ£o estiver em inglÃªs.
+    	// Se o nome estiver incompleto InformaÃ§Ãµes aleatÃ³rias vÃ£o ser cuspidas na tela.
       
     	
         String urlbusca = "http://www.ligamagic.com.br/?view=cards/card&card="; 
@@ -57,7 +46,7 @@ public class RoboLigaMagic {
         
         List<Carta> resposta = new ArrayList<Carta>();
         
-		try { // NOTA: Maldito java que me força a envolver as coisas em Try/Catch 
+		try { // NOTA: Maldito java que me forÃ§a a envolver as coisas em Try/Catch 
 			url = urlbusca + URLEncoder.encode(nomeCarta,"UTF-8"); 
 			Connection connection = Jsoup.connect(url);
 			
@@ -69,8 +58,8 @@ public class RoboLigaMagic {
             Elements precosSujo = new Elements();
             Elements quantidadeSuja =  new Elements();
             
-            // TODO: Decidir como o programa deve responder caso não exista em estoque em nenhum lugar uma cópia da carta
-            // TODO: Decidir como o programa deve responder caso não exita em estoque uma quantidade de carta o suficiente.
+            // TODO: Decidir como o programa deve responder caso nÃ£o exista em estoque em nenhum lugar uma cÃ³pia da carta
+            // TODO: Decidir como o programa deve responder caso nÃ£o exita em estoque uma quantidade de carta o suficiente.
             
             for(int loop = 0;loop < precosEQuantidades.size();loop++){
             	if(loop % 2 == 0){
@@ -81,10 +70,8 @@ public class RoboLigaMagic {
             	}
             }
             
-            
-            // NOTA: o primeiro é o nome e o segundo é uma outra coisa whatever
-			// NOTA: Esse algoritmo bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
-  			// nesse cara. ass: Líder
+			// NOTA: Esse algoritmo bem ad-hoc, qualquer mudanï¿½a no site da liga pode impactar em mudanï¿½as
+  			// nesse cara. ass: LÃ­der
 
             Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
             
@@ -110,23 +97,23 @@ public class RoboLigaMagic {
             
             return resposta;
              
-            // TODO: ver se dá pra downloadar e exibir a imagemzinha da carta
+            // TODO: ver se dÃ¡ pra downloadar e exibir a imagemzinha da carta
            
-            // TODO: Ver se não seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
+            // TODO: Ver se nï¿½o seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
         
 		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace(); // Pânico
+			e1.printStackTrace(); // PÃ¢nico
 		} catch (IOException e) {
-			e.printStackTrace(); // Mais Pânico
+			e.printStackTrace(); // Mais PÃ¢nico
 		}
 		
 		return null;
         
-        // NOTA: Em referenced libraries, o jar com o jsoup está configurado para ser o que está na minha maquina de trabalho
-        // se você mudar vai dar erro.
-        // lembre-se de mudar esse cara depois caso você execute o projeto de outra maquina
-        // o .jar está dentro da pasta desse projeto
-        // Ass: Líder
+        // NOTA: Em referenced libraries, o jar com o jsoup estï¿½ configurado para ser o que estÃ¡ na minha maquina de trabalho
+        // se vocÃª mudar vai dar erro.
+        // lembre-se de mudar esse cara depois caso vocï¿½ execute o projeto de outra maquina
+        // o .jar estï¿½ dentro da pasta desse projeto
+        // Ass: LÃ­der
     }
     
 }
