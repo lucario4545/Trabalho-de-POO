@@ -24,7 +24,15 @@ public class RoboLigaMagic {
 			String nomeCarta = carta[0];
 			int quantidade = Integer.parseInt(carta[1]);
 			
-			List<Carta> response = buscarPreco(nomeCarta,quantidade);
+			List<Carta> response = null;
+			
+			try{
+				response = buscarPreco(nomeCarta,quantidade);
+			}catch(IllegalArgumentException e){
+				System.out.println(e.getMessage()+"\n");
+				continue;
+			}
+			
 			
 			relacaoDePrecos.addAll(response);	
 		}
@@ -58,7 +66,9 @@ public class RoboLigaMagic {
             Elements precosSujo = new Elements();
             Elements quantidadeSuja =  new Elements();
             
-            // TODO: Decidir como o programa deve responder caso não exista em estoque em nenhum lugar uma cópia da carta
+            if(precosEQuantidades.size() < 1){
+            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" não existe em estoque");
+            }
             // TODO: Decidir como o programa deve responder caso não exita em estoque uma quantidade de carta o suficiente.
             
             for(int loop = 0;loop < precosEQuantidades.size();loop++){
