@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Image;
+
 public class Carta {
 	private String nome;
 	private int quantidade;
@@ -65,17 +67,5 @@ public class Carta {
 		msg += "Cole��o: "+this.colecao+";  Loja: "+this.loja+"; Preco: R$ "+this.preco+"\n\n";
 		return msg;
 	}
-<<<<<<< HEAD
 
-	
-=======
-	
-	public void setImgURL(String url){
-		this.imgURL = url;
-	}
-	
-	public String getImgURL(){
-		return this.imgURL;
-	}
->>>>>>> Mudança para entender como essa merda funciona - além de outras integrações com o resto do sistema - .
 }

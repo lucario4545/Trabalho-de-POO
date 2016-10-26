@@ -1,10 +1,15 @@
 package roboLigaMagic;
 
+import java.awt.Image;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -40,7 +45,7 @@ public class RoboLigaMagic {
 		return relacaoDePrecos;
 	}
 	
-    public static List<Carta> buscarPreco(String nomeCarta, int quantidade){
+    public List<Carta> buscarPreco(String nomeCarta, int quantidade){
     	// NOTA: Essas linhas só são necessárias para fazer essa merda funcionar no meu trabalho
     	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
 		System.setProperty("http.proxyPort", "8080"); 
@@ -66,10 +71,11 @@ public class RoboLigaMagic {
             
             Elements precosSujo = new Elements();
             Elements quantidadeSuja =  new Elements();
-            
+
             if(precosEQuantidades.size() < 1){
             	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" n�o foi encontrada!");
             }
+
             // TODO: Decidir como o programa deve responder caso não exita em estoque uma quantidade de carta o suficiente.
             
             for(int loop = 0;loop < precosEQuantidades.size();loop++){
@@ -111,13 +117,12 @@ public class RoboLigaMagic {
             	
             	quantidade -= q;	
             	resposta.add(new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco,colecao,imgSrc));
-
             	loop++;
             }
             
             return resposta;
            
-            // TODO: Ver se n�o seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
+            // TODO: Ver se não seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
         
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace(); // Pânico
@@ -132,6 +137,11 @@ public class RoboLigaMagic {
         // lembre-se de mudar esse cara depois caso voc� execute o projeto de outra maquina
         // o .jar est� dentro da pasta desse projeto
         // Ass: Líder
+    }
+    
+    private Image getCardImage(String imgUrl) throws MalformedURLException, IOException{
+    	Image image = ImageIO.read(new URL(imgUrl)); 
+    	return image;
     }
     
 }
