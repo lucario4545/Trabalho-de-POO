@@ -5,7 +5,15 @@ public class Carta {
 	private int quantidade;
 	private String loja;
 	private double preco;
+	private String colecao;
+	private String imgSrc;
 
+	public Carta(String nome,int quantidade,String loja,double preco,String colecao, String imgSrc){
+		this(nome,quantidade,loja,preco);
+		this.colecao = colecao;
+		this.imgSrc = imgSrc;
+	}
+	
 	public Carta(String nome,int quantidade,String loja,double preco){
 		this.nome = nome;
 		this.quantidade = quantidade;
@@ -42,10 +50,21 @@ public class Carta {
 		this.preco = preco;
 	}
 	
+	public String getColecao() {
+		return colecao;
+	}
+
+	public void setColecao(String colecao) {
+		this.colecao = colecao;
+	}
+	
 	@Override
 	public String toString(){
 		
-		String msg = "Nome Carta: "+this.nome+"; Quantidade: "+this.quantidade+"; Loja: "+this.loja+"; Preco: R$ "+this.preco;	
+		String msg = "Nome Carta: "+this.nome+"; Quantidade: "+this.quantidade+";\n";
+		msg += "Coleção: "+this.colecao+";  Loja: "+this.loja+"; Preco: R$ "+this.preco+"\n\n";
 		return msg;
 	}
+
+	
 }
