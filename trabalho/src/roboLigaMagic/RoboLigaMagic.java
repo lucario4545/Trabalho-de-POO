@@ -49,7 +49,8 @@ public class RoboLigaMagic {
     	// Se o nome estiver incompleto Informações aleatórias vão ser cuspidas na tela.
       
     	
-        String urlbusca = "http://www.ligamagic.com.br/?view=cards/card&card="; 
+        String urlbusca = "http://www.ligamagic.com.br/?view=cards%2Fsearch&card="; 
+        	// NOTA: Essa url me permite pesquisar nomes de cartas em portugu�s
         String url; 
         
         List<Carta> resposta = new ArrayList<Carta>();
@@ -67,7 +68,7 @@ public class RoboLigaMagic {
             Elements quantidadeSuja =  new Elements();
             
             if(precosEQuantidades.size() < 1){
-            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" não existe em estoque");
+            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" n�o foi encontrada!");
             }
             // TODO: Decidir como o programa deve responder caso não exita em estoque uma quantidade de carta o suficiente.
             
@@ -84,6 +85,7 @@ public class RoboLigaMagic {
   			// nesse cara. ass: Líder
 
             Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
+            Elements tagColecaoCarta = doc.select(" tr > td > a.preto > img.icon");
             
             int loop = 0;
             
@@ -99,9 +101,12 @@ public class RoboLigaMagic {
      
             	double preco = Double.parseDouble(precoS.replace(",","."));
             	
+            	String imgSrc = tagBannerLoja.get(loop).attr("src");
+            	String colecao = tagColecaoCarta.get(loop).attr("title");
+            	
             	quantidade -= q;	
 
-            	resposta.add(new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco));
+            	resposta.add(new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco,colecao,imgSrc));
             	loop++;
             }
             
