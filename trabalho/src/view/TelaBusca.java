@@ -19,11 +19,13 @@ import javax.swing.JTextField; // NOTA: Isso ainda vai ser usado um dia.
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.alee.extended.image.WebImage;
+
 import model.Carta;
 import roboLigaMagic.RoboLigaMagic;
 
 public class TelaBusca extends JFrame {
-
+	
 	private JPanel contentPane;
 
 	/**
@@ -55,6 +57,7 @@ public class TelaBusca extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		WebImage img = new WebImage();
 		JButton btnBusca = new JButton("Busca");
 		btnBusca.setBounds(10, 0, 89, 23);
 		contentPane.add(btnBusca);

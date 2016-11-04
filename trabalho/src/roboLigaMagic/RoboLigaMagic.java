@@ -87,8 +87,13 @@ public class RoboLigaMagic {
             Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
             Elements tagColecaoCarta = doc.select(" tr > td > a.preto > img.icon");
             
-            int loop = 0;
+            // pegar a imagem
             
+            Elements imgs = doc.select("div.card-image > span#omoImage > img");          
+            String imgSrc = imgs.get(0).attr("src");
+            
+            int loop = 0;
+                     
             while(quantidade > 0){
             	
             	String quantS = quantidadeSuja.get(loop).text().split(" ")[0];
@@ -105,14 +110,12 @@ public class RoboLigaMagic {
             	String colecao = tagColecaoCarta.get(loop).attr("title");
             	
             	quantidade -= q;	
-
             	resposta.add(new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco,colecao,imgSrc));
+
             	loop++;
             }
             
             return resposta;
-             
-            // TODO: ver se dá pra downloadar e exibir a imagemzinha da carta
            
             // TODO: Ver se n�o seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
         

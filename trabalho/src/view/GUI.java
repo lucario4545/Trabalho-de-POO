@@ -144,6 +144,7 @@ public class GUI extends WebFrame implements KeyListener, ChangeListener, FocusL
 	public void stateChanged(ChangeEvent arg0) {
 		updatePriceForMultiplier((double)multiplier.getValue(), count);
 	}
+	
 	@Override
 	public void focusGained(FocusEvent e) {
 		update();
@@ -151,6 +152,7 @@ public class GUI extends WebFrame implements KeyListener, ChangeListener, FocusL
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
+		System.out.println("When you look into my beautiful eyes");
 		WebTextField curr = getCurrentTextField();
 		Query query = Main.primaryList.list[Integer.parseInt(curr.getName())];
 		if(e.getKeyCode() == 9){
