@@ -14,6 +14,9 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField; // NOTA: Isso ainda vai ser usado um dia.
 import javax.swing.border.EmptyBorder;
@@ -30,8 +33,6 @@ public class TelaBusca extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		// TODO: Essa lógica de pra letura tem que sair daqui e tem que ser colocada no pacote controller
-		// de preferência - Líder
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -49,35 +50,42 @@ public class TelaBusca extends JFrame {
 	 */
 	public TelaBusca() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 109, 62);
+		setBounds(300, 150, 720, 480);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Arquivo");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmAbrir = new JMenuItem("Abrir");
+		mntmAbrir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String caminho = procuraArquivo();
+					ArrayList<String[]> relacao = getRelacaoCartas(caminho);
+					exibePrecoDeck(relacao);
+					
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+			}
+		});
+		mnNewMenu.add(mntmAbrir);
+		
+		JMenuItem mntmSair = new JMenuItem("Sair");
+		mntmSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		mnNewMenu.add(mntmSair);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnBusca = new JButton("Busca");
-		btnBusca.setBounds(10, 0, 89, 23);
-		contentPane.add(btnBusca);
-		
-		ActionListener busca = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					
-					String caminho = procuraArquivo();
-					ArrayList<String[]> relacao = getRelacaoCartas(caminho);
-					exibePrecoDeck(relacao);
-					
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
-				
-				
-			}			
-		};
-		
-		btnBusca.addActionListener(busca);
 	}
 	
 	public String procuraArquivo(){

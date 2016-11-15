@@ -9,9 +9,11 @@ import java.util.List;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import model.Carta;
+import controller.Util;
 
 public class RoboLigaMagic {
 	public List<Carta> getPrecoDeck(List<String[]> listaCartas){
@@ -37,10 +39,16 @@ public class RoboLigaMagic {
 			relacaoDePrecos.addAll(response);	
 		}
 		
+		// Nome, coleção , quantidade , preco , loja , 
+		
+		Util toolbox = new Util();
+		
+		toolbox.xlsExport(relacaoDePrecos);
+		
 		return relacaoDePrecos;
 	}
 	
-    public static List<Carta> buscarPreco(String nomeCarta, int quantidade){
+    public List<Carta> buscarPreco(String nomeCarta, int quantidade){
     	// NOTA: Essas linhas só são necessárias para fazer essa merda funcionar no meu trabalho
     	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
 		System.setProperty("http.proxyPort", "8080"); 
@@ -49,8 +57,8 @@ public class RoboLigaMagic {
     	// Se o nome estiver incompleto Informações aleatórias vão ser cuspidas na tela.
       
     	
-        String urlbusca = "http://www.ligamagic.com.br/?view=cards%2Fsearch&card="; 
-        	// NOTA: Essa url me permite pesquisar nomes de cartas em portugu�s
+        String urlbusca = "http://www.ligamagic.com.br/?view=cards/card&card="; 
+        	// NOTA: Essa url me permite pesquisar nomes de cartas em portugu�s
         String url; 
         
         List<Carta> resposta = new ArrayList<Carta>();
@@ -61,14 +69,13 @@ public class RoboLigaMagic {
 			
             Document doc = connection.get();
             
-            Elements precosEQuantidades = doc.select("tr > td > p"); 
-            
+            Elements precosEQuantidades = doc.select("tr.pointer > td > p"); 
             
             Elements precosSujo = new Elements();
             Elements quantidadeSuja =  new Elements();
             
             if(precosEQuantidades.size() < 1){
-            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" n�o foi encontrada!");
+            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" n�o foi encontrada!");
             }
             // TODO: Decidir como o programa deve responder caso não exita em estoque uma quantidade de carta o suficiente.
             
@@ -86,6 +93,13 @@ public class RoboLigaMagic {
 
             Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
             Elements tagColecaoCarta = doc.select(" tr > td > a.preto > img.icon");
+            
+            int quantMaxima = getQuantidadeMaxima(quantidadeSuja);
+            
+            if(quantidade > quantMaxima){
+            	System.out.println("Você esta pedindo uma quantidade muito grande cartas, animal\n");
+            	quantidade = quantMaxima;
+            }
             
             int loop = 0;
             
@@ -129,6 +143,16 @@ public class RoboLigaMagic {
         // lembre-se de mudar esse cara depois caso voc� execute o projeto de outra maquina
         // o .jar est� dentro da pasta desse projeto
         // Ass: Líder
+    }
+    
+    private int getQuantidadeMaxima(Elements quantidadeSuja){
+    	int resposta = 0;
+    	
+    	for(Element element : quantidadeSuja){
+    		resposta += Integer.parseInt(element.text().split(" ")[0]);
+    	}
+    	
+    	return resposta;
     }
     
 }
