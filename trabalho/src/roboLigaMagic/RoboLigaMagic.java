@@ -34,12 +34,9 @@ public class RoboLigaMagic {
 				System.out.println(e.getMessage()+"\n");
 				continue;
 			}
-			
-			
+				
 			relacaoDePrecos.addAll(response);	
 		}
-		
-		// Nome, coleção , quantidade , preco , loja , 
 		
 		Util toolbox = new Util();
 		
@@ -58,7 +55,7 @@ public class RoboLigaMagic {
       
     	
         String urlbusca = "http://www.ligamagic.com.br/?view=cards/card&card="; 
-        	// NOTA: Essa url me permite pesquisar nomes de cartas em portugu�s
+        
         String url; 
         
         List<Carta> resposta = new ArrayList<Carta>();
@@ -75,7 +72,7 @@ public class RoboLigaMagic {
             Elements quantidadeSuja =  new Elements();
             
             if(precosEQuantidades.size() < 1){
-            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" n�o foi encontrada!");
+            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" não foi encontrada!");
             }
             // TODO: Decidir como o programa deve responder caso não exita em estoque uma quantidade de carta o suficiente.
             
@@ -88,7 +85,7 @@ public class RoboLigaMagic {
             	}
             }
             
-			// NOTA: Esse algoritmo bem ad-hoc, qualquer mudan�a no site da liga pode impactar em mudan�as
+			// NOTA: Esse algoritmo bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
   			// nesse cara. ass: Líder
 
             Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
@@ -128,7 +125,7 @@ public class RoboLigaMagic {
              
             // TODO: ver se dá pra downloadar e exibir a imagemzinha da carta
            
-            // TODO: Ver se n�o seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
+            // TODO: Ver se não seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
         
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace(); // Pânico
@@ -138,10 +135,10 @@ public class RoboLigaMagic {
 		
 		return null;
         
-        // NOTA: Em referenced libraries, o jar com o jsoup est� configurado para ser o que está na minha maquina de trabalho
+        // NOTA: Em referenced libraries, o jar com o jsoup está configurado para ser o que está na minha maquina de trabalho
         // se você mudar vai dar erro.
         // lembre-se de mudar esse cara depois caso voc� execute o projeto de outra maquina
-        // o .jar est� dentro da pasta desse projeto
+        // o .jar está dentro da pasta desse projeto
         // Ass: Líder
     }
     
