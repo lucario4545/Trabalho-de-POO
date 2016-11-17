@@ -24,6 +24,7 @@ public class RoboLigaMagic {
 		for(int loop =0;loop<listaCartas.size();loop++){
 			String[] carta = listaCartas.get(loop);
 			String nomeCarta = carta[0];
+			System.out.println(nomeCarta);
 			int quantidade = Integer.parseInt(carta[1]);
 			
 			List<Carta> response = null;
@@ -50,17 +51,13 @@ public class RoboLigaMagic {
     	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
 		System.setProperty("http.proxyPort", "8080"); 
     	
-    	// NOTA: O algoritmo não funciona o nome da carta não estiver em inglês.
-    	// Se o nome estiver incompleto Informações aleatórias vão ser cuspidas na tela.
-      
-    	
         String urlbusca = "http://www.ligamagic.com.br/?view=cards/card&card="; 
         
         String url; 
         
         List<Carta> resposta = new ArrayList<Carta>();
         
-		try { // NOTA: Maldito java que me força a envolver as coisas em Try/Catch 
+		try { 
 			url = urlbusca + URLEncoder.encode(nomeCarta,"UTF-8"); 
 			Connection connection = Jsoup.connect(url);
 			
@@ -74,7 +71,6 @@ public class RoboLigaMagic {
             if(precosEQuantidades.size() < 1){
             	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" não foi encontrada!");
             }
-            // TODO: Decidir como o programa deve responder caso não exita em estoque uma quantidade de carta o suficiente.
             
             for(int loop = 0;loop < precosEQuantidades.size();loop++){
             	if(loop % 2 == 0){
@@ -84,9 +80,6 @@ public class RoboLigaMagic {
             		quantidadeSuja.add(precosEQuantidades.get(loop));
             	}
             }
-            
-			// NOTA: Esse algoritmo bem ad-hoc, qualquer mudança no site da liga pode impactar em mudanças
-  			// nesse cara. ass: Líder
 
             Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
             Elements tagColecaoCarta = doc.select(" tr > td > a.preto > img.icon");
@@ -122,31 +115,25 @@ public class RoboLigaMagic {
             }
             
             return resposta;
-             
-            // TODO: ver se dá pra downloadar e exibir a imagemzinha da carta
-           
-            // TODO: Ver se não seria melhor downlodar tudo, colocar num banco de dados e depois exibir pro usuario.
         
 		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace(); // Pânico
+			e1.printStackTrace(); 
 		} catch (IOException e) {
-			e.printStackTrace(); // Mais Pânico
+			e.printStackTrace(); 
 		}
 		
 		return null;
-        
-        // NOTA: Em referenced libraries, o jar com o jsoup está configurado para ser o que está na minha maquina de trabalho
-        // se você mudar vai dar erro.
-        // lembre-se de mudar esse cara depois caso voc� execute o projeto de outra maquina
-        // o .jar está dentro da pasta desse projeto
-        // Ass: Líder
     }
     
     private int getQuantidadeMaxima(Elements quantidadeSuja){
     	int resposta = 0;
     	
     	for(Element element : quantidadeSuja){
-    		resposta += Integer.parseInt(element.text().split(" ")[0]);
+    		String text = element.text().split(" ")[0];	
+    		text = text.replaceAll("[,.]",""); // Isso é pro caso de cartas com quantidade muito grandes em estoque.
+    		// NOTA: Ver se não já não está na hora de pensar em performance.
+    
+    		resposta += Integer.parseInt(text);
     	}
     	
     	return resposta;

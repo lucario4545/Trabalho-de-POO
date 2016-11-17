@@ -23,7 +23,7 @@ public class Util {
 		
 		try{
 		    PrintWriter writer = new PrintWriter("relacao-de-precos2.csv", "UTF-8");
-		    writer.println("Quantidade;Nome;Coleção;Preco;Loja");
+		    writer.println("Quantidade;Nome;Coleção;Preco Unitário;Preco Total;Loja");
 		    
 		    for(Carta carta : lista){
 		    	String line = "";
@@ -31,14 +31,15 @@ public class Util {
 		    	line+=carta.getQuantidade()+";";
 		    	line+=carta.getNome()+";";
 		    	line+=carta.getColecao()+";";
-		    	line+=carta.getPreco()+";";
+		    	line+=String.format("%.2f;",carta.getPreco());
+		    	line+=String.format("%.2f;",(carta.getPreco() * carta.getQuantidade()));
 		    	line+=carta.getLoja()+";";
 		    	
 		    	writer.println(line);
 		    }
 		    
 		    writer.println();
-		    writer.println(";;Total;"+this.getValorTotal(lista));
+		    writer.println(";;Total;"+String.format("%.2f;",this.getValorTotal(lista)));
 		    
 		    writer.close();
 		} catch (Exception e) {
