@@ -62,7 +62,7 @@ public class Carta {
 	public String toString(){
 		
 		String msg = "Nome Carta: "+this.nome+"; Quantidade: "+this.quantidade+";\n";
-		msg += "Coleção: "+this.colecao+";  Loja: "+this.loja+"; Preco: R$ "+this.preco+"\n\n";
+		msg += "ColeÃ§Ã£o: "+this.colecao+";  Loja: "+this.loja+"; Preco: R$ "+this.preco+"\n\n";
 		return msg;
 	}
 
