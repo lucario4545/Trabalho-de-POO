@@ -23,8 +23,13 @@ public class RoboLigaMagic {
 		
 		for(int loop =0;loop<listaCartas.size();loop++){
 			String[] carta = listaCartas.get(loop);
+					
+			if(carta.length != 2 || carta == null){
+				continue;
+			}
+			
 			String nomeCarta = carta[0];
-			System.out.println(nomeCarta);
+			
 			int quantidade = Integer.parseInt(carta[1]);
 			
 			List<Carta> response = null;
