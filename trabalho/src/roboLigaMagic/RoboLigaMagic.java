@@ -22,23 +22,23 @@ public class RoboLigaMagic {
 		List<Carta> relacaoDePrecos = new ArrayList<>();
 		
 		for(int loop =0;loop<listaCartas.size();loop++){
-			String[] carta = listaCartas.get(loop);
-					
-			if(carta.length != 2 || carta == null){
+			List<Carta> response = null;
+			try{
+				String[] carta = listaCartas.get(loop);
+				String nomeCarta = carta[0];
+				System.out.println(nomeCarta);
+				int quantidade = Integer.parseInt(carta[1]);
+				
+				response = buscarPreco(nomeCarta,quantidade);
+			}
+			
+			catch(ArrayIndexOutOfBoundsException arrErr){
 				continue;
 			}
 			
-			String nomeCarta = carta[0];
-			
-			int quantidade = Integer.parseInt(carta[1]);
-			
-			List<Carta> response = null;
-			
-			try{
-				response = buscarPreco(nomeCarta,quantidade);
-			}catch(IllegalArgumentException e){
+			catch(Exception e){
 				System.out.println(e.getMessage()+"\n");
-				continue;
+				continue; // Panico
 			}
 				
 			relacaoDePrecos.addAll(response);	
