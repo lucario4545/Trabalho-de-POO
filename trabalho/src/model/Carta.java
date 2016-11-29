@@ -7,6 +7,7 @@ public class Carta {
 	private double preco;
 	private String colecao;
 	private String imgSrc;
+	private String linkLoja; // NOTA: isso me parece meio mambembe . lider
 
 	public Carta(String nome,int quantidade,String loja,double preco,String colecao, String imgSrc){
 		this(nome,quantidade,loja,preco);
@@ -58,11 +59,19 @@ public class Carta {
 		this.colecao = colecao;
 	}
 	
+	public String getLinkLoja(){
+		return this.linkLoja;
+	}
+	
+	public void setLinkLoja(String link){
+		this.linkLoja = link;
+	}
+	
 	@Override
 	public String toString(){
 		
 		String msg = "Nome Carta: "+this.nome+"; Quantidade: "+this.quantidade+";\n";
-		msg += "ColeÃ§Ã£o: "+this.colecao+";  Loja: "+this.loja+"; Preco: R$ "+this.preco+"\n\n";
+		msg += "Coleção: "+this.colecao+";  Loja: "+this.loja+"; Preco: R$ "+this.preco+"\n\n";
 		return msg;
 	}
 
