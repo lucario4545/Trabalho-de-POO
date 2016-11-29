@@ -50,7 +50,6 @@ public class RoboLigaMagic {
 	}
 	
     public List<Carta> buscarPreco(String nomeCarta, int quantidade){
-    	// NOTA: Essas linhas são são necessárias para fazer essa merda funcionar no meu trabalho
     	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
 		System.setProperty("http.proxyPort", "8080"); 
     	
@@ -72,7 +71,7 @@ public class RoboLigaMagic {
             Elements quantidadeSuja =  new Elements();
             
             if(precosEQuantidades.size() < 1){
-            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" não foi encontrada!");
+            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" nï¿½o foi encontrada!");
             }
             
             for(int loop = 0;loop < precosEQuantidades.size();loop++){
