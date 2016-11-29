@@ -17,8 +17,6 @@ import controller.Util;
 
 public class RoboLigaMagic {
 	public List<Carta> getPrecoDeck(List<String[]> listaCartas){
-		// NOTA: Exemplo de Matriz
-		// [["Archangel Avacyn",4],["Chandra Nalaar",2],["Ulrich of the Krallenhorde",2]];
 		List<Carta> relacaoDePrecos = new ArrayList<>();
 		
 		for(int loop =0;loop<listaCartas.size();loop++){
@@ -38,7 +36,7 @@ public class RoboLigaMagic {
 			
 			catch(Exception e){
 				System.out.println(e.getMessage()+"\n");
-				continue; // Panico
+				continue; 
 			}
 				
 			relacaoDePrecos.addAll(response);	
@@ -52,7 +50,7 @@ public class RoboLigaMagic {
 	}
 	
     public List<Carta> buscarPreco(String nomeCarta, int quantidade){
-    	// NOTA: Essas linhas só são necessárias para fazer essa merda funcionar no meu trabalho
+    	// NOTA: Essas linhas s�o s�o necess�rias para fazer essa merda funcionar no meu trabalho
     	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
 		System.setProperty("http.proxyPort", "8080"); 
     	
@@ -74,7 +72,7 @@ public class RoboLigaMagic {
             Elements quantidadeSuja =  new Elements();
             
             if(precosEQuantidades.size() < 1){
-            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" não foi encontrada!");
+            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" n�o foi encontrada!");
             }
             
             for(int loop = 0;loop < precosEQuantidades.size();loop++){
@@ -86,13 +84,14 @@ public class RoboLigaMagic {
             	}
             }
 
-            Elements tagBannerLoja = doc.select("tr > td.banner-loja > a > img");
-            Elements tagColecaoCarta = doc.select(" tr > td > a.preto > img.icon");
+            Elements tagBannerLoja 		= doc.select("tr > td.banner-loja > a > img");
+            Elements tagColecaoCarta 	= doc.select("tr > td > a.preto > img.icon");
+            Elements tagLinkLoja		= doc.select("tr > td.banner-loja > a");
             
             int quantMaxima = getQuantidadeMaxima(quantidadeSuja);
             
             if(quantidade > quantMaxima){
-            	System.out.println("Você esta pedindo uma quantidade muito grande cartas, animal\n");
+            	System.out.println("Quantidade de cartas muito grande solicitada\n");
             	quantidade = quantMaxima;
             }
             
@@ -115,15 +114,24 @@ public class RoboLigaMagic {
             	
             	quantidade -= q;	
 
+            	Carta carta = new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco,colecao,imgSrc);
+            	
+            	String baseLink = "http://www.ligamagic.com.br/";
+            	String linkLoja = baseLink + tagLinkLoja.get(loop).attr("href");
+            	carta.setLinkLoja(linkLoja);
+            	
             	resposta.add(new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco,colecao,imgSrc));
+            	
             	loop++;
             }
             
             return resposta;
         
-		} catch (UnsupportedEncodingException e1) {
+		} 
+		catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace(); 
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
 			e.printStackTrace(); 
 		}
 		
@@ -135,9 +143,7 @@ public class RoboLigaMagic {
     	
     	for(Element element : quantidadeSuja){
     		String text = element.text().split(" ")[0];	
-    		text = text.replaceAll("[,.]",""); // Isso é pro caso de cartas com quantidade muito grandes em estoque.
-    		// NOTA: Ver se não já não está na hora de pensar em performance.
-    
+    		text = text.replaceAll("[,.]",""); 
     		resposta += Integer.parseInt(text);
     	}
     	

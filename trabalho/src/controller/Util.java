@@ -3,8 +3,8 @@ package controller;
 import java.util.List;
 
 import model.Carta;
-import java.io.PrintWriter;
 
+import java.io.PrintWriter;
 
 public class Util {
 	public double getValorTotal(List<Carta> lista){
@@ -18,12 +18,11 @@ public class Util {
 	}
 	
 	public void xlsExport(List<Carta> lista){
-		
 		lista = this.sortListaCartas(lista);
 		
 		try{
 		    PrintWriter writer = new PrintWriter("relacao-de-precos2.csv", "UTF-8");
-		    writer.println("Quantidade;Nome;Cole√ß√£o;Preco Unit√°rio;Preco Total;Loja");
+		    writer.println("Quantidade;Nome;ColeÁ„o;Preco Unit·rio;Preco Total;Loja");
 		    
 		    for(Carta carta : lista){
 		    	String line = "";

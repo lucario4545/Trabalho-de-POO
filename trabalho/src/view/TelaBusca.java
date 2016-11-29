@@ -29,9 +29,6 @@ public class TelaBusca extends JFrame {
 
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -45,9 +42,6 @@ public class TelaBusca extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public TelaBusca() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(300, 150, 720, 480);
@@ -62,16 +56,17 @@ public class TelaBusca extends JFrame {
 		mntmAbrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					
 					String caminho = procuraArquivo();
 					ArrayList<String[]> relacao = getRelacaoCartas(caminho);
 					exibePrecoDeck(relacao);
 					
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} 
 			}
 		});
+		
 		mnNewMenu.add(mntmAbrir);
 		
 		JMenuItem mntmSair = new JMenuItem("Sair");
@@ -116,12 +111,14 @@ public class TelaBusca extends JFrame {
 		ArrayList<String[]> Cartas = new ArrayList<String[]> (); 
 		
 		try {
+			
 			FileReader fileReader = new FileReader(file);
 			BufferedReader reader = new BufferedReader(fileReader);
 			
 			String linha = reader.readLine();
 			
 			while(linha != null){
+				
 				String [] array;
 				array = linha.split(";");
 				Cartas.add(array);
@@ -135,17 +132,21 @@ public class TelaBusca extends JFrame {
 			e.printStackTrace();
 		}
 		
-		return Cartas;
+		return Cartas; // TODO: Colocar a exibição de um warning caso seja inserido um arquivo invalido
 	}
 	
 	public void exibePrecoDeck(ArrayList<String[]> cartas){
+		
 		RoboLigaMagic robo = new RoboLigaMagic();
+		System.out.println("teste");
 		
 		List<Carta> relacaoDeck = robo.getPrecoDeck(cartas);
+		System.out.println("teste");
 		
 		for(int loop = 0; loop< relacaoDeck.size();loop++){
 			System.out.println(relacaoDeck.get(loop).toString()+"\n");
 		}
+		
 		return;
 	}
 
