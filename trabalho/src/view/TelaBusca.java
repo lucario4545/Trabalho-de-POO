@@ -92,7 +92,7 @@ public class TelaBusca extends JFrame {
 		
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos de texto (.txt)","txt");
 
-		String diretorioBase = System.getProperty("user.home")+"/Documents";
+		String diretorioBase = System.getProperty("user.home")+"/Desktop";
 		File dir = new File(diretorioBase);
 		
 		JFileChooser choose = new JFileChooser();
