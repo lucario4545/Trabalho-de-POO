@@ -138,10 +138,8 @@ public class TelaBusca extends JFrame {
 	public void exibePrecoDeck(ArrayList<String[]> cartas){
 		
 		RoboLigaMagic robo = new RoboLigaMagic();
-		System.out.println("teste");
 		
 		List<Carta> relacaoDeck = robo.getPrecoDeck(cartas);
-		System.out.println("teste");
 		
 		for(int loop = 0; loop< relacaoDeck.size();loop++){
 			System.out.println(relacaoDeck.get(loop).toString()+"\n");
