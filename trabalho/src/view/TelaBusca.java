@@ -49,10 +49,8 @@ public class TelaBusca {
 
 	private JFrame frmPesquisadorDeCartas;
 	private JComboBox BoxCartas = new JComboBox();
-//	private Map listaCartas = new HashMap();
-	/**
-	 * Launch the application.
-	 */
+	private List<Carta> listaCartas = null;
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -66,18 +64,12 @@ public class TelaBusca {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public TelaBusca() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
-		//Janela Principal
+		
 		frmPesquisadorDeCartas = new JFrame();
 		frmPesquisadorDeCartas.setResizable(false);
 		frmPesquisadorDeCartas.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Diana\\Desktop\\photo.png"));
@@ -85,46 +77,61 @@ public class TelaBusca {
 		frmPesquisadorDeCartas.setBounds(100, 100, 800, 600);
 		frmPesquisadorDeCartas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//Menu de opções
+		
 		JMenuBar menuBar = new JMenuBar();
 		frmPesquisadorDeCartas.setJMenuBar(menuBar);
 		
-		//Opcão Raiz do menu de opções
+		
 		JMenu MenuOptions = new JMenu("Editar...");
 		MenuOptions.setMnemonic('E');
 		menuBar.add(MenuOptions);
 		
-		//Opção secundaria do menu - Abrir o Arquivo
+		JScrollPane SPValorFinal = new JScrollPane();
+		SPValorFinal.setBounds(474, 43, 300, 276);
+		frmPesquisadorDeCartas.getContentPane().add(SPValorFinal);
+		
+		JTextArea TValorFinal = new JTextArea();
+		TValorFinal.setEditable(false);
+		SPValorFinal.setViewportView(TValorFinal);
+		
+		
 		JMenuItem MenuAbrir = new JMenuItem("Abrir");
 		MenuAbrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String caminho = procuraArquivo();
 				ArrayList<String[]> relacao;
+				List<Carta> relacaoDeck = null;
 				try {
 					relacao = getRelacaoCartas(caminho);
-					getPrecoDeck(relacao);
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
+					relacaoDeck = getPrecoDeck(relacao);
+					String valorFinal = TelaBusca.this.getValorTotal(relacaoDeck);
+					TValorFinal.setText(valorFinal);
+					
+				} 
+				
+				catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
+		
 		MenuAbrir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
 		MenuOptions.add(MenuAbrir);
 		
-		//Opção secundaria do menu - Salvar Arquivo
 		JMenuItem MenuSalvar = new JMenuItem("Salvar");
 		MenuSalvar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		MenuOptions.add(MenuSalvar);
-		
-		//Opção secundaria do menu - Sair do programa		
+				
 		JMenuItem MenuSair = new JMenuItem("Sair");
 		MenuSair.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
 		MenuSair.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
 			}
+			
 		});
+		
 		MenuOptions.add(MenuSair);
 		frmPesquisadorDeCartas.getContentPane().setLayout(null);
 		
@@ -140,14 +147,6 @@ public class TelaBusca {
 		PCarta.setBounds(201, 43, 189, 264);
 		frmPesquisadorDeCartas.getContentPane().add(PCarta);
 		PCarta.setLayout(null);		
-		
-		JScrollPane SPValorFinal = new JScrollPane();
-		SPValorFinal.setBounds(474, 43, 300, 276);
-		frmPesquisadorDeCartas.getContentPane().add(SPValorFinal);
-		
-		JTextArea TValorFinal = new JTextArea();
-		TValorFinal.setEditable(false);
-		SPValorFinal.setViewportView(TValorFinal);
 		
 		JTextPane TXTPrecos = new JTextPane();
 		TXTPrecos.setEditable(false);
@@ -179,16 +178,18 @@ public class TelaBusca {
 
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-            		RoboLigaMagic robo = new RoboLigaMagic();
             		Carta Choosen = (Carta) BoxCartas.getSelectedItem();
-            		
+         
 					PCarta.removeAll();
+					
 					ImageIcon AAA  = new ImageIcon(Choosen.getImagem());
 					Image imag = AAA.getImage().getScaledInstance(189, 264, Image.SCALE_SMOOTH);
 					ImageIcon b= new ImageIcon(imag);					
 					JLabel lblNewLabel = new JLabel(b);
+					
 					lblNewLabel.setBounds(0, 0, 189, 264);
 					PCarta.add(lblNewLabel);
+					
 					TPrecos.setText(Choosen.getRelacaoPrecos());
                 }
             }
@@ -244,24 +245,39 @@ public class TelaBusca {
 			e.printStackTrace();
 		}
 		
-		return Cartas; // TODO: Colocar a exibição de um warning caso seja inserido um arquivo invalido
+		return Cartas; 
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void getPrecoDeck(ArrayList<String[]> cartas){
+	public List<Carta> getPrecoDeck(ArrayList<String[]> cartas){
 		System.out.println("Inicio");
 		
 		RoboLigaMagic robo = new RoboLigaMagic();
 		
-//		Map map = new HashMap();
-		List<Carta> relacaoDeck = robo.getPrecoDeck(cartas);
+		List<Carta> relacaoDeck = null;
+		relacaoDeck = robo.getPrecoDeck(cartas);
 		
 		for(Carta carta : relacaoDeck){
-//			map.put(carta.getNome(),carta);
 			BoxCartas.addItem(carta);
 		}
 		
-//		this.listaCartas = map;
+		return relacaoDeck;
 	}
+	
+	public String getValorTotal(List<Carta> relacaoDeck){
+		String msg = "";
+		
+		double valorTotal = 0;
+		for(Carta carta: relacaoDeck){
+			msg+=carta.getNome()+" "+carta.getQuantidadeTotal()+" "+" R$ "+String.format("%.2f", carta.getPrecoTotal())+"\n";
+			valorTotal+=carta.getPrecoTotal();
+		}
+		
+		msg+="\nValor Total: R$ "+String.format("%.2f",valorTotal);
+		
+		return msg;
+	}
+	
+	
 
 }
