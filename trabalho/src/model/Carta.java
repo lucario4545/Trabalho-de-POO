@@ -24,8 +24,7 @@ public class Carta {
 	
 	@Override
 	public String toString(){
-		String str = "";
-		return str;
+		return this.nome;
 	}
 	
 	public void addCartaLoja(CartaLoja loja){
@@ -59,4 +58,16 @@ public class Carta {
 		
 		return imagem;
 	}
+	
+	public String getRelacaoPrecos(){
+		String msg = "";
+		
+		for(CartaLoja loja : this.lojas){
+			msg+=loja.toString()+"\n";
+		}
+		
+		return msg;
+	}
+	
+	
 }

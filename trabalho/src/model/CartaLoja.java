@@ -46,5 +46,16 @@ public class CartaLoja {
 		this.nomeLoja = loja;
 	}
 	
+	@Override
+	public String toString(){
+		String msg = "";
+		
+		msg+="Loja: "+this.nomeLoja+"\t Coleção: "+this.colecao+"\n";
+		msg+="Preço Unitário: R$ "+String.format("%.2f",this.preco)+"\t ";
+		msg+="Quantidade: "+this.quantidade+"\n";
+		
+		return msg;
+	}
+	
 	
 }
