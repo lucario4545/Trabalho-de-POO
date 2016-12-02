@@ -72,7 +72,7 @@ public class TelaBusca {
 		
 		frmPesquisadorDeCartas = new JFrame();
 		frmPesquisadorDeCartas.setResizable(false);
-		frmPesquisadorDeCartas.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Diana\\Desktop\\photo.png"));
+		frmPesquisadorDeCartas.setIconImage(Toolkit.getDefaultToolkit().getImage("img\\photo.png"));
 		frmPesquisadorDeCartas.setTitle("Pesquisador de Cartas - Magic the Gathering");
 		frmPesquisadorDeCartas.setBounds(100, 100, 800, 600);
 		frmPesquisadorDeCartas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -265,7 +265,7 @@ public class TelaBusca {
 		
 		double valorTotal = 0;
 		for(Carta carta: relacaoDeck){
-			msg+=carta.getNome()+" "+carta.getQuantidadeTotal()+" "+" R$ "+String.format("%.2f", carta.getPrecoTotal())+"\n";
+			msg+=carta.getQuantidadeTotal()+"x  "+carta.getNome()+"  "+" R$ "+String.format("%.2f", carta.getPrecoTotal())+"\n";
 			valorTotal+=carta.getPrecoTotal();
 		}
 		
