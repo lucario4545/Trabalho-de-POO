@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import model.Carta;
+import model.CartaLoja;
 import controller.Util;
 
 public class RoboLigaMagic {
@@ -20,11 +21,12 @@ public class RoboLigaMagic {
 		List<Carta> relacaoDePrecos = new ArrayList<>();
 		
 		for(int loop =0;loop<listaCartas.size();loop++){
-			List<Carta> response = null;
+			Carta response = null;
+			
 			try{
+				
 				String[] carta = listaCartas.get(loop);
 				String nomeCarta = carta[0];
-				System.out.println(nomeCarta);
 				int quantidade = Integer.parseInt(carta[1]);
 				
 				response = buscarPreco(nomeCarta,quantidade);
@@ -39,25 +41,23 @@ public class RoboLigaMagic {
 				continue; 
 			}
 				
-			relacaoDePrecos.addAll(response);	
+			relacaoDePrecos.add(response);	
 		}
 		
 		Util toolbox = new Util();
 		
-		toolbox.xlsExport(relacaoDePrecos);
+		toolbox.csvExport(relacaoDePrecos);
 		
 		return relacaoDePrecos;
 	}
 	
-    public List<Carta> buscarPreco(String nomeCarta, int quantidade){
+    public Carta buscarPreco(String nomeCarta, int quantidade){
     	System.setProperty("http.proxyHost", "spoigpxy0002.indusval.com.br");
 		System.setProperty("http.proxyPort", "8080"); 
     	
         String urlbusca = "http://www.ligamagic.com.br/?view=cards/card&card="; 
         
         String url; 
-        
-        List<Carta> resposta = new ArrayList<Carta>();
         
 		try { 
 			url = urlbusca + URLEncoder.encode(nomeCarta,"UTF-8"); 
@@ -71,7 +71,7 @@ public class RoboLigaMagic {
             Elements quantidadeSuja =  new Elements();
             
             if(precosEQuantidades.size() < 1){
-            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" nï¿½o foi encontrada!");
+            	throw new IllegalArgumentException("A Carta \""+nomeCarta+"\" não foi encontrada!");
             }
             
             for(int loop = 0;loop < precosEQuantidades.size();loop++){
@@ -96,6 +96,11 @@ public class RoboLigaMagic {
             
             int loop = 0;
             
+            Elements imagemCarta = doc.select("div.card-image > span > img ");
+            Element imagem = imagemCarta.first();
+            
+            Carta carta = new Carta(nomeCarta,imagem.attr("src"));
+            
             while(quantidade > 0){
             	
             	String quantS = quantidadeSuja.get(loop).text().split(" ")[0];
@@ -108,23 +113,21 @@ public class RoboLigaMagic {
      
             	double preco = Double.parseDouble(precoS.replace(",","."));
             	
-            	String imgSrc = tagBannerLoja.get(loop).attr("src");
             	String colecao = tagColecaoCarta.get(loop).attr("title");
-            	
-            	quantidade -= q;	
-
-            	Carta carta = new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco,colecao,imgSrc);
             	
             	String baseLink = "http://www.ligamagic.com.br/";
             	String linkLoja = baseLink + tagLinkLoja.get(loop).attr("href");
-            	carta.setLinkLoja(linkLoja);
             	
-            	resposta.add(new Carta(nomeCarta,quantidadeCartas,nomeLoja,preco,colecao,imgSrc));
+            	CartaLoja loja = new CartaLoja(quantidadeCartas,preco,colecao,linkLoja,nomeLoja);
+            	
+            	carta.addCartaLoja(loja);
+            	
+            	quantidade -= q;
             	
             	loop++;
             }
             
-            return resposta;
+            return carta;
         
 		} 
 		catch (UnsupportedEncodingException e1) {

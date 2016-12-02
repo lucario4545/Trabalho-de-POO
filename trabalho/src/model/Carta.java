@@ -1,79 +1,62 @@
 package model;
 
+import java.awt.Image;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
 public class Carta {
 	private String nome;
-	private int quantidade;
-	private String loja;
-	private double preco;
-	private String colecao;
-	private String imgSrc;
-	private String linkLoja; // NOTA: isso me parece meio mambembe . lider
-
-	public Carta(String nome,int quantidade,String loja,double preco,String colecao, String imgSrc){
-		this(nome,quantidade,loja,preco);
-		this.colecao = colecao;
-		this.imgSrc = imgSrc;
-	}
+	private Image imagem;
+	private ArrayList<CartaLoja> lojas = new ArrayList<CartaLoja>();
 	
-	public Carta(String nome,int quantidade,String loja,double preco){
+	public Carta(String nome,String imgSrc){
 		this.nome = nome;
-		this.quantidade = quantidade;
-		this.loja = loja;
-		this.preco = preco;
+		this.imagem = this.getImageObject(imgSrc);
 	}
 	
-	public Carta(){
-		this("",0,"",0.0);
-	}
-	
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
+	public Carta(String nome,Image imagem){
 		this.nome = nome;
-	}
-	public int getQuantidade() {
-		return quantidade;
-	}
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
-	public String getLoja() {
-		return loja;
-	}
-	public void setLoja(String loja) {
-		this.loja = loja;
-	}
-	public double getPreco() {
-		return preco;
-	}
-	public void setPreco(double preco) {
-		this.preco = preco;
-	}
-	
-	public String getColecao() {
-		return colecao;
-	}
-
-	public void setColecao(String colecao) {
-		this.colecao = colecao;
-	}
-	
-	public String getLinkLoja(){
-		return this.linkLoja;
-	}
-	
-	public void setLinkLoja(String link){
-		this.linkLoja = link;
+		this.imagem = imagem;
 	}
 	
 	@Override
 	public String toString(){
-		
-		String msg = "Nome Carta: "+this.nome+"; Quantidade: "+this.quantidade+";\n";
-		msg += "Coleção: "+this.colecao+";  Loja: "+this.loja+"; Preco: R$ "+this.preco+"\n\n";
-		return msg;
+		String str = "";
+		return str;
 	}
-
 	
+	public void addCartaLoja(CartaLoja loja){
+		this.lojas.add(loja);
+	}
+	
+	public ArrayList<CartaLoja> getLojas(){
+		return this.lojas;
+	}
+	
+	public String getNome(){
+		return this.nome;
+	}
+	
+	public Image getImagem(){
+		return this.imagem;
+	}
+	
+	private Image getImageObject(String imgSrc){
+		
+		URL url;
+		Image imagem = null;
+		
+		try {
+			url = new URL(imgSrc);
+			imagem = ImageIO.read(url);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return imagem;
+	}
 }
