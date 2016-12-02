@@ -14,7 +14,7 @@ podendo ser em portugues ou ingles, e a quantidade de cartas desejadas sendo sep
 
 Exemplo:(o .txt que você criar deve estar naste formato nas cartas)
 
-Avacyn, Anjo da Esperança;2
+Avacyn, Anjo da Esperança;2\n
 Caminho para o Exílio;4
 Toxic Deluge;2
 Berserk;4
