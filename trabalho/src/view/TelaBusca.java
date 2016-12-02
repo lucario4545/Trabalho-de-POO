@@ -49,6 +49,7 @@ public class TelaBusca {
 
 	private JFrame frmPesquisadorDeCartas;
 	private JComboBox BoxCartas = new JComboBox();
+	private List<Carta> listaCartas = null;
 //	private Map listaCartas = new HashMap();
 	/**
 	 * Launch the application.
@@ -94,15 +95,27 @@ public class TelaBusca {
 		MenuOptions.setMnemonic('E');
 		menuBar.add(MenuOptions);
 		
+		JScrollPane SPValorFinal = new JScrollPane();
+		SPValorFinal.setBounds(474, 43, 300, 276);
+		frmPesquisadorDeCartas.getContentPane().add(SPValorFinal);
+		
+		JTextArea TValorFinal = new JTextArea();
+		TValorFinal.setEditable(false);
+		SPValorFinal.setViewportView(TValorFinal);
+		
 		//Opção secundaria do menu - Abrir o Arquivo
 		JMenuItem MenuAbrir = new JMenuItem("Abrir");
 		MenuAbrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String caminho = procuraArquivo();
 				ArrayList<String[]> relacao;
+				List<Carta> relacaoDeck = null;
 				try {
 					relacao = getRelacaoCartas(caminho);
-					getPrecoDeck(relacao);
+					relacaoDeck = getPrecoDeck(relacao);
+					String valorFinal = TelaBusca.this.getValorTotal(relacaoDeck);
+					TValorFinal.setText(valorFinal);
+					
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -140,14 +153,6 @@ public class TelaBusca {
 		PCarta.setBounds(201, 43, 189, 264);
 		frmPesquisadorDeCartas.getContentPane().add(PCarta);
 		PCarta.setLayout(null);		
-		
-		JScrollPane SPValorFinal = new JScrollPane();
-		SPValorFinal.setBounds(474, 43, 300, 276);
-		frmPesquisadorDeCartas.getContentPane().add(SPValorFinal);
-		
-		JTextArea TValorFinal = new JTextArea();
-		TValorFinal.setEditable(false);
-		SPValorFinal.setViewportView(TValorFinal);
 		
 		JTextPane TXTPrecos = new JTextPane();
 		TXTPrecos.setEditable(false);
@@ -248,20 +253,35 @@ public class TelaBusca {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void getPrecoDeck(ArrayList<String[]> cartas){
+	public List<Carta> getPrecoDeck(ArrayList<String[]> cartas){
 		System.out.println("Inicio");
 		
 		RoboLigaMagic robo = new RoboLigaMagic();
 		
-//		Map map = new HashMap();
-		List<Carta> relacaoDeck = robo.getPrecoDeck(cartas);
+		List<Carta> relacaoDeck = null;
+		relacaoDeck = robo.getPrecoDeck(cartas);
 		
 		for(Carta carta : relacaoDeck){
-//			map.put(carta.getNome(),carta);
 			BoxCartas.addItem(carta);
 		}
 		
-//		this.listaCartas = map;
+		return relacaoDeck;
 	}
+	
+	public String getValorTotal(List<Carta> relacaoDeck){
+		String msg = "";
+		
+		double valorTotal = 0;
+		for(Carta carta: relacaoDeck){
+			msg+=carta.getNome()+" "+carta.getQuantidadeTotal()+" "+" R$ "+String.format("%.2f", carta.getPrecoTotal())+"\n";
+			valorTotal+=carta.getPrecoTotal();
+		}
+		
+		msg+="\nValor Total: R$ "+String.format("%.2f",valorTotal);
+		
+		return msg;
+	}
+	
+	
 
 }

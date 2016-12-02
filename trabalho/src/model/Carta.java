@@ -69,5 +69,20 @@ public class Carta {
 		return msg;
 	}
 	
+	public double getPrecoTotal(){
+		double resp = 0;
+		for(CartaLoja loja : this.lojas){
+			resp+= (loja.getQuantidade() * loja.getPreco());
+		}
+		return resp;
+	}
+	
+	public int getQuantidadeTotal(){
+		int resp = 0;
+		for(CartaLoja loja : this.lojas){
+			resp+= loja.getQuantidade();
+		}
+		return resp;
+	}
 	
 }
