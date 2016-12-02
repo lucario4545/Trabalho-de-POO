@@ -23,9 +23,7 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 
@@ -48,7 +46,9 @@ import roboLigaMagic.RoboLigaMagic;
 public class TelaBusca {
 
 	private JFrame frmPesquisadorDeCartas;
+	@SuppressWarnings("rawtypes")
 	private JComboBox BoxCartas = new JComboBox();
+	@SuppressWarnings("unused")
 	private List<Carta> listaCartas = null;
 
 	public static void main(String[] args) {
@@ -117,10 +117,6 @@ public class TelaBusca {
 		
 		MenuAbrir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
 		MenuOptions.add(MenuAbrir);
-		
-		JMenuItem MenuSalvar = new JMenuItem("Salvar");
-		MenuSalvar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-		MenuOptions.add(MenuSalvar);
 				
 		JMenuItem MenuSair = new JMenuItem("Sair");
 		MenuSair.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
