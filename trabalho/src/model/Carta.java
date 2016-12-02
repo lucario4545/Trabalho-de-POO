@@ -1,15 +1,25 @@
 package model;
 
+import java.awt.Image;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 public class Carta {
 	private String nome;
-	private String imgSrc;
+	private Image imagem;
 	private ArrayList<CartaLoja> lojas = new ArrayList<CartaLoja>();
 	
 	public Carta(String nome,String imgSrc){
 		this.nome = nome;
-		this.imgSrc = imgSrc;
+		this.imagem = this.getImageObject(imgSrc);
+	}
+	
+	public Carta(String nome,Image imagem){
+		this.nome = nome;
+		this.imagem = imagem;
 	}
 	
 	@Override
@@ -30,7 +40,23 @@ public class Carta {
 		return this.nome;
 	}
 	
-	public String getImgSrc(){
-		return this.imgSrc;
+	public Image getImagem(){
+		return this.imagem;
+	}
+	
+	private Image getImageObject(String imgSrc){
+		
+		URL url;
+		Image imagem = null;
+		
+		try {
+			url = new URL(imgSrc);
+			imagem = ImageIO.read(url);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return imagem;
 	}
 }

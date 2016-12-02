@@ -28,7 +28,7 @@ public class Util {
 		    
 		    
 		    for(Carta carta : lista){
-		    	System.out.println(carta.getImgSrc());
+//		    	System.out.println(carta.getImgSrc());
 		    	String line = "";
 		    	
 		    	for(CartaLoja loja : carta.getLojas()){
@@ -48,7 +48,9 @@ public class Util {
 		    writer.println(";;Total;"+String.format("%.2f;",this.getValorTotal(lista)));
 		    
 		    writer.close();
-		} catch (Exception e) {
+		} 
+		
+		catch (Exception e) {
 		   e.getStackTrace();
 		}
 	}
