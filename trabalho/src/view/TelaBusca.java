@@ -8,22 +8,31 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+
 import java.awt.Font;
 import java.awt.Image;
+
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.SystemColor;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
+
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.KeyStroke;
+
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,6 +49,7 @@ public class TelaBusca {
 
 	private JFrame frmPesquisadorDeCartas;
 	private JComboBox BoxCartas = new JComboBox();
+//	private Map listaCartas = new HashMap();
 	/**
 	 * Launch the application.
 	 */
@@ -92,7 +102,7 @@ public class TelaBusca {
 				ArrayList<String[]> relacao;
 				try {
 					relacao = getRelacaoCartas(caminho);
-					exibePrecoDeck(relacao);
+					getPrecoDeck(relacao);
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -170,7 +180,8 @@ public class TelaBusca {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
             		RoboLigaMagic robo = new RoboLigaMagic();
-                    Carta Choosen= robo.buscarPreco((String) BoxCartas.getSelectedItem(), BoxCartas.getSelectedIndex());	
+            		Carta Choosen = (Carta) BoxCartas.getSelectedItem();
+            		
 					PCarta.removeAll();
 					ImageIcon AAA  = new ImageIcon(Choosen.getImagem());
 					Image imag = AAA.getImage().getScaledInstance(189, 264, Image.SCALE_SMOOTH);
@@ -178,7 +189,7 @@ public class TelaBusca {
 					JLabel lblNewLabel = new JLabel(b);
 					lblNewLabel.setBounds(0, 0, 189, 264);
 					PCarta.add(lblNewLabel);
-					TPrecos.setText(Choosen.toString()+"\n");
+					TPrecos.setText(Choosen.getRelacaoPrecos());
                 }
             }
        });
@@ -219,15 +230,9 @@ public class TelaBusca {
 			String linha = reader.readLine();
 			BoxCartas.removeAllItems();
 			while(linha != null){
-				
-				if(linha == ""){
-					linha = reader.readLine();
-					continue;
-				}
-				
+
 				String [] array;
-				array = linha.split(";");
-				BoxCartas.addItem(array[0]);
+				array = linha.split(";");	
 				Cartas.add(array);
 				
 				linha = reader.readLine();
@@ -242,21 +247,21 @@ public class TelaBusca {
 		return Cartas; // TODO: Colocar a exibição de um warning caso seja inserido um arquivo invalido
 	}
 	
-	public void exibePrecoDeck(ArrayList<String[]> cartas){
-		System.out.println("teste");
+	@SuppressWarnings("unchecked")
+	public void getPrecoDeck(ArrayList<String[]> cartas){
+		System.out.println("Inicio");
+		
 		RoboLigaMagic robo = new RoboLigaMagic();
-
 		
+//		Map map = new HashMap();
 		List<Carta> relacaoDeck = robo.getPrecoDeck(cartas);
-		Carta Choosen= robo.buscarPreco
-				((String) BoxCartas.getSelectedItem(), BoxCartas.getSelectedIndex());
-		System.out.println("teste");
 		
-		for(int loop = 0; loop< relacaoDeck.size();loop++){
-			System.out.println(Choosen.toString()+"\n");
+		for(Carta carta : relacaoDeck){
+//			map.put(carta.getNome(),carta);
+			BoxCartas.addItem(carta);
 		}
 		
-		return;
+//		this.listaCartas = map;
 	}
 
 }
